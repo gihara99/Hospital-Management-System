@@ -1,0 +1,97 @@
+if (String.IsNullOrEmpty(txt_name.Text))
+            {
+                error_msg.Text = "Namme can't be blank";
+                txt_name.Focus();
+            }
+            else if (txt_name.Text.Any(char.IsDigit))
+            {
+                error_msg.Text = "Name can't have Numbers";
+                txt_name.Focus();
+            }
+
+            else if (comGenderType.SelectedIndex == -1)
+            {
+                error_msg2.Text = "You must select a gender type";
+                comGenderType.Focus();
+
+            }
+            else if (txt_password.Text.Length == 0)
+            {
+                error_msg3.Text = "Please enter password";
+                txt_password.Focus();
+            }
+            else if (txt_confPassword.Text.Length == 0)
+            {
+                error_msg4.Text = "Please enter your confirm password";
+                txt_confPassword.Focus();
+            }
+            else if (txt_password.Text != txt_confPassword.Text)
+            {
+                error_msg4.Text = "Confirm password must same as the password";
+                txt_confPassword.Focus();
+            }
+            else if (string.IsNullOrEmpty(txt_address.Text))
+            {
+                error_msg5.Text = "Address can't be blank";
+                txt_address.Focus();
+            }
+            else if (!Regex.IsMatch(txt_mbNumber.Text, @"^(?:7|0|(?:\+94))[0-9]{8,9}$"))
+            {
+                error_msg6.Text = "Mobile number must have 10 numbers";
+                txt_mbNumber.Focus();
+            }
+            else if (txt_email.Text.Length == 0)
+            {
+                error_msg7.Text = "please enter Email Address";
+                txt_email.Focus();
+            }
+            //else if (!Regex.IsMatch(txt_email.Text, @"^[a-zA-Z][\w.-][a-zA-Z0-9]@[a-zA-Z0-9][\w.-][a-zA-Z0-9].[a-zA-Z][a-zA-Z.]*[a-zA-Z]$"))
+            //{
+            //error_msg7.Text = "Enter a valid Email . Ex: name@gmail.com";
+            //txt_email.Focus();
+            //}
+             else
+            {
+                error_msg.Text = "";
+
+                error_msg2.Text = "";
+                error_msg3.Text = "";
+                error_msg4.Text = "";
+                error_msg5.Text = "";
+                error_msg6.Text = "";
+                error_msg7.Text = "";
+            }
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+type select
+
+SqlConnection con = new SqlConnection("Data Source=DESKTOP-R2VBIN1;Initial Catalog=TestLog;Integrated Security=True");
+            SqlCommand cmd = new SqlCommand("select * from logintable where username='"+txtUsername.Text+"'and password='"+txtPassword.Text+"'",con);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            string cmbItemValue = comType.SelectedItem.ToString();
+            if(dt.Rows.Count>0)
+            {
+                for(int i=0; i<dt.Rows.Count; i++)
+                {
+                    if (dt.Rows[i]["usertype"].ToString() == cmbItemValue);
+                    {
+                        if(comType.SelectedIndex==0)
+                        {
+                            Admin a = new Admin();
+                            a.Show();
+                        }
+                        else
+                        {
+                            Doctor d = new Doctor();
+                            d.Show();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("user name or passord not in correct please check again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
